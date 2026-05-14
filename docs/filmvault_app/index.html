@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Film Vault</title>
+    <meta name="description" content="Film Vaultは、カメラの撮影設定レシピを記録・整理するためのiPhone/iPadアプリです。">
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f5ef;
+        --surface: #ffffff;
+        --text: #1f2428;
+        --muted: #687076;
+        --line: #ded8cc;
+        --accent: #2f6f64;
+        --accent-dark: #204d45;
+        --warm: #c56f3a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+        line-height: 1.7;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      a {
+        color: var(--accent-dark);
+        text-decoration-thickness: 0.08em;
+        text-underline-offset: 0.18em;
+      }
+
+      .page {
+        width: min(100%, 1040px);
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+        gap: 40px;
+        align-items: center;
+        min-height: 560px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--accent-dark);
+        font-size: 0.84rem;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(3rem, 8vw, 5.8rem);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 660px;
+        margin: 24px 0 0;
+        color: #364046;
+        font-size: 1.15rem;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 18px;
+        border: 1px solid var(--accent);
+        border-radius: 8px;
+        background: var(--accent);
+        color: #ffffff;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .button.secondary {
+        background: transparent;
+        color: var(--accent-dark);
+      }
+
+      .device {
+        position: relative;
+        width: min(100%, 340px);
+        margin-left: auto;
+        aspect-ratio: 0.58;
+        border: 12px solid #202428;
+        border-radius: 34px;
+        background: #fdfbf6;
+        box-shadow: 0 28px 70px rgba(31, 36, 40, 0.22);
+        overflow: hidden;
+      }
+
+      .device::before {
+        content: "";
+        position: absolute;
+        top: 9px;
+        left: 50%;
+        width: 86px;
+        height: 9px;
+        border-radius: 999px;
+        background: #202428;
+        transform: translateX(-50%);
+        z-index: 2;
+      }
+
+      .screen {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        height: 100%;
+        padding: 34px 18px 20px;
+        background:
+          linear-gradient(180deg, rgba(47, 111, 100, 0.12), rgba(197, 111, 58, 0.1)),
+          #fdfbf6;
+      }
+
+      .app-icon {
+        width: 62px;
+        height: 62px;
+        border-radius: 16px;
+        background:
+          linear-gradient(135deg, var(--accent), var(--warm));
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+      }
+
+      .screen-title {
+        margin: 18px 0 6px;
+        font-size: 1.35rem;
+        font-weight: 800;
+      }
+
+      .screen-subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .recipe-list {
+        display: grid;
+        gap: 10px;
+        align-self: end;
+      }
+
+      .recipe-row {
+        min-height: 72px;
+        padding: 12px;
+        border: 1px solid rgba(222, 216, 204, 0.9);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .recipe-name {
+        margin: 0 0 4px;
+        font-weight: 800;
+      }
+
+      .recipe-meta {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .section {
+        padding: 56px 0 0;
+        border-top: 1px solid var(--line);
+      }
+
+      h2 {
+        margin: 0 0 18px;
+        font-size: clamp(1.65rem, 4vw, 2.4rem);
+        line-height: 1.2;
+        letter-spacing: 0;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      .feature {
+        min-height: 160px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .feature h3 {
+        margin: 0 0 8px;
+        font-size: 1.05rem;
+      }
+
+      .feature p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .legal {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        margin-top: 14px;
+        padding: 0;
+        list-style: none;
+      }
+
+      footer {
+        margin-top: 56px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 780px) {
+        .page {
+          padding: 24px 18px 40px;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 32px;
+          min-height: 0;
+          padding: 36px 0 48px;
+        }
+
+        .device {
+          width: min(100%, 300px);
+          margin: 0;
+        }
+
+        .features {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero" aria-labelledby="title">
+        <div>
+          <p class="eyebrow">撮影設定レシピ管理アプリ</p>
+          <h1 id="title">Film Vault</h1>
+          <p class="lead">
+            Film Vaultは、カメラの撮影設定レシピを記録し、写真と一緒に整理するためのiPhone/iPadアプリです。
+            自分のレシピ、気に入った色づくり、撮影時の設定メモをひとつの場所に保管できます。
+          </p>
+          <div class="actions" aria-label="主要リンク">
+            <a class="button" href="./legal/">法務情報を見る</a>
+            <a class="button secondary" href="./legal/privacy_policy.md">プライバシーポリシー</a>
+          </div>
+        </div>
+        <div class="device" aria-label="Film Vaultの画面イメージ">
+          <div class="screen">
+            <div>
+              <div class="app-icon" aria-hidden="true"></div>
+              <p class="screen-title">My Recipes</p>
+              <p class="screen-subtitle">Film simulations, tones, white balance, notes</p>
+            </div>
+            <div class="recipe-list" aria-hidden="true">
+              <div class="recipe-row">
+                <p class="recipe-name">Soft Morning</p>
+                <p class="recipe-meta">Classic Chrome / WB Shift / Highlights</p>
+              </div>
+              <div class="recipe-row">
+                <p class="recipe-name">Night Walk</p>
+                <p class="recipe-meta">ETERNA / Color / Shadow Tone</p>
+              </div>
+              <div class="recipe-row">
+                <p class="recipe-name">Travel Color</p>
+                <p class="recipe-meta">PROVIA / Grain / Sharpness</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="features">
+        <h2 id="features">レシピを記録し、撮影に戻しやすく。</h2>
+        <div class="features">
+          <section class="feature">
+            <h3>設定をまとめて保存</h3>
+            <p>フィルムシミュレーション、ホワイトバランス、トーン、カラーなどの設定をレシピとして整理できます。</p>
+          </section>
+          <section class="feature">
+            <h3>写真と紐づけ</h3>
+            <p>撮影した写真とレシピを関連づけて、どの設定で撮ったかを後から確認しやすくします。</p>
+          </section>
+          <section class="feature">
+            <h3>下書き作成を補助</h3>
+            <p>手動入力、スクリーンショット、共有された情報をもとに、レシピ作成を補助します。</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="legal">
+        <h2 id="legal">法務情報</h2>
+        <p>利用規約、プライバシーポリシー、特定商取引法に基づく表記、免責事項は以下から確認できます。</p>
+        <ul class="legal">
+          <li><a href="./legal/terms_of_service.md">利用規約</a></li>
+          <li><a href="./legal/privacy_policy.md">プライバシーポリシー</a></li>
+          <li><a href="./legal/commercial_law.md">特定商取引法に基づく表記</a></li>
+          <li><a href="./legal/disclaimer.md">免責事項</a></li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>
+          Film Vaultは、富士フイルム株式会社、FUJIFILM Corporation、FUJI X Weekly、その他の外部サイトまたは外部サービスが提供、後援、承認、監修、運営するものではありません。
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
